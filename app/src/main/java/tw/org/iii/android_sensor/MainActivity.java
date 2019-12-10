@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor sensor;
     private MyListener myListener;
+    private TextView x,y,z;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        x = findViewById(R.id.x);
+        y = findViewById(R.id.y);
+        z = findViewById(R.id.z);
 
         //看手機有哪些感應器
 //        List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -30,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
 //            Log.v("DCH", sensor.getName()+ ":" +sensor.getStringType());
 //        }
 
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        //三軸穩定器 ACCELEROMETER
+        //光感應器 LIGHT
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
     }
 
     //有在使用才註冊
@@ -52,7 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-
+            float[] data =  event.values;
+            x.setText("x = " +(int)data[0]*10/10f);
+            y.setText("y = " +(int)data[1]*10/10f);
+            z.setText("z = " +(int)data[2]*10/10f);
         }
 
         @Override
